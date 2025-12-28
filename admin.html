@@ -25,48 +25,41 @@
         #modal-login { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
         .login-box { width: 85%; max-width: 320px; text-align: center; }
 
-        /* NAVBAR SUPERIOR */
+        /* NAVBAR */
         .top-nav-container { padding: 20px 15px; text-align: center; }
         .logo-main { font-size: 1.5rem; font-weight: 900; letter-spacing: 3px; color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; }
         
-        .tab-bar { 
-            background: #111; padding: 6px; border-radius: 15px; display: flex; 
-            justify-content: space-between; align-items: center; margin: 0 auto; max-width: 450px;
-        }
-        .tab-btn { 
-            padding: 10px 12px; border-radius: 12px; color: var(--text-dim); 
-            font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.3s; flex: 1; text-align: center;
-        }
+        .tab-bar { background: #111; padding: 6px; border-radius: 15px; display: flex; max-width: 450px; margin: 0 auto; }
+        .tab-btn { padding: 10px; border-radius: 12px; color: var(--text-dim); font-size: 0.7rem; font-weight: 700; cursor: pointer; flex: 1; text-align: center; transition: 0.3s; }
         .tab-btn.active { color: #fff; border-bottom: 2px solid #fff; border-radius: 0; }
-        .tab-btn.premium-active { background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3); border-radius: 12px; }
+        .tab-btn.premium-active { background: var(--primary); color: #000; border-radius: 12px; }
 
-        /* CONTEÚDO */
+        /* CARDS */
         .content { padding: 0 15px; max-width: 500px; margin: auto; }
         .card { background: var(--card); border-radius: 22px; padding: 20px; margin-bottom: 15px; border: 1px solid #222; }
         
+        /* ESTILOS DA AGENDA (DESTAQUES) */
+        .client-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .client-name { font-size: 1.3rem; font-weight: 900; color: #fff; text-transform: uppercase; }
+        .agenda-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; border-top: 1px dashed #333; }
+        .label-mini { font-size: 0.65rem; font-weight: 800; color: var(--primary); text-transform: uppercase; display: block; margin-bottom: 2px; }
+        .val-highlight { font-size: 0.95rem; font-weight: 700; color: #fff; }
+        .val-service { color: var(--success); }
+
+        /* FORMULÁRIOS */
         label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--primary); margin: 0 0 8px 5px; text-transform: uppercase; }
-        input, select, textarea { 
-            width: 100%; padding: 16px; background: var(--input-bg); border: 1px solid #282828; 
-            border-radius: 14px; color: #fff; margin-bottom: 15px; font-size: 1rem;
-        }
+        input, select, textarea { width: 100%; padding: 16px; background: var(--input-bg); border: 1px solid #282828; border-radius: 14px; color: #fff; margin-bottom: 15px; font-size: 1rem; }
+        .btn-action { width: 100%; padding: 18px; border-radius: 14px; border: none; background: var(--grad); color: #000; font-weight: 900; text-transform: uppercase; }
 
-        .btn-action { 
-            width: 100%; padding: 18px; border-radius: 14px; border: none; 
-            background: var(--grad); color: #000; font-weight: 900; text-transform: uppercase; font-size: 0.85rem;
-        }
-
-        /* GRID HORARIOS */
-        .grid-horas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .hora-chip { 
-            background: #1d1d1d; padding: 12px 5px; border-radius: 12px; font-size: 0.85rem; 
-            text-align: center; font-weight: 700; border: 1px solid #333; transition: 0.2s; color: var(--text-dim);
-        }
+        /* GRID FOLGAS */
+        .grid-horas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+        .hora-chip { background: #1d1d1d; padding: 12px 5px; border-radius: 10px; font-size: 0.8rem; text-align: center; font-weight: 700; border: 1px solid #333; color: var(--text-dim); }
         .hora-chip.selected { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-        .agenda-info-line { border-top: 1px solid #222; margin-top: 10px; padding-top: 10px; display: flex; gap: 8px; font-size: 0.9rem; flex-wrap: wrap; }
+        /* LISTAS */
         .item-list { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; }
-        .btn-mini-del { color: var(--danger); font-weight: 800; font-size: 0.75rem; background: none; border: none; text-transform: uppercase; }
-        .btn-mini-edit { color: var(--primary); font-weight: 800; font-size: 0.75rem; background: none; border: none; text-transform: uppercase; margin-right: 15px; }
+        .btn-mini-del { color: var(--danger); font-weight: 800; font-size: 0.7rem; background: none; border: none; text-transform: uppercase; cursor: pointer; }
+        .btn-mini-edit { color: var(--primary); font-weight: 800; font-size: 0.7rem; background: none; border: none; text-transform: uppercase; margin-right: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -81,12 +74,12 @@
 
 <div id="main-app" style="display: none;">
     <div class="top-nav-container">
-        <div class="logo-main"><span>✂️</span> EL NEGRONES</div>
+        <div class="logo-main">✂️ EL NEGRONES</div>
         <div class="tab-bar">
             <div class="tab-btn active" onclick="switchTab('agenda', this)">Agenda</div>
             <div class="tab-btn" onclick="switchTab('equipe', this)">Equipe</div>
             <div class="tab-btn" onclick="switchTab('folgas', this)">Folgas</div>
-            <div class="tab-btn" onclick="switchTab('premium', this)">⭐ Premium</div>
+            <div class="tab-btn" onclick="switchTab('premium', this)">⭐ Plano</div>
         </div>
     </div>
 
@@ -96,10 +89,12 @@
         <div id="tab-equipe" class="tab-content" style="display: none;">
             <div class="card">
                 <input type="hidden" id="b-id">
-                <label>Nome do Profissional</label>
+                <label>Nome do Barbeiro</label>
                 <input id="b-nome" placeholder="Ex: Jean">
+                <label>WhatsApp (Somente números)</label>
+                <input id="b-whatsapp" type="tel" placeholder="11999999999">
                 <label>Serviços e Preços</label>
-                <textarea id="b-servs" rows="4" placeholder="Corte - R$ 35,00&#10;Barba - R$ 20,00"></textarea>
+                <textarea id="b-servs" rows="3" placeholder="Corte - R$ 30"></textarea>
                 <button class="btn-action" id="btn-salvar-barbeiro" onclick="salvarBarbeiro()">Adicionar Barbeiro</button>
                 <button class="btn-mini-del" id="btn-cancelar-edit" style="display:none; width:100%; margin-top:10px;" onclick="resetFormEquipe()">Cancelar Edição</button>
             </div>
@@ -108,25 +103,22 @@
 
         <div id="tab-folgas" class="tab-content" style="display: none;">
             <div class="card">
-                <label>Selecionar Barbeiro</label>
+                <label>Profissional</label>
                 <select id="f-barbeiro"><option value="">Carregando...</option></select>
-                
-                <label>Data da Folga (Somente hoje ou futuro)</label>
+                <label>Data</label>
                 <input type="date" id="f-data">
-                
                 <label>Selecione os Horários</label>
                 <div class="grid-horas" id="grid-horas-folga"></div>
-                
-                <button class="btn-action" style="background:var(--danger); color:#fff" onclick="salvarFolga()">Bloquear Selecionados</button>
+                <button class="btn-action" style="background:var(--danger); color:#fff" onclick="salvarFolga()">Bloquear Seleção</button>
             </div>
             <div id="render-folgas"></div>
         </div>
 
         <div id="tab-premium" class="tab-content" style="display: none;">
             <div class="card" style="text-align: center; padding: 40px 15px;">
-                <h2 class="status-header">Gerenciar Assinatura</h2>
-                <div style="margin: 15px 0 25px;"><span id="txt-restam" style="font-size: 1.3rem; font-weight: 800;">...</span></div>
-                <a href="https://mpago.la/1bCHsKA" target="_blank" class="btn-renew" style="color:white; text-decoration:none; background:var(--blue-action); padding:10px 20px; border-radius:10px; display:block;">RENOVAR</a>
+                <h2 style="color:var(--primary); margin-bottom:20px;">Assinatura do Sistema</h2>
+                <div id="txt-restam" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 25px;">...</div>
+                <a href="https://mpago.la/1bCHsKA" target="_blank" style="background:var(--blue-action); color:#fff; padding:18px; display:block; text-decoration:none; font-weight:900; border-radius:14px;">RENOVAR AGORA</a>
             </div>
         </div>
     </div>
@@ -146,14 +138,7 @@
 
     let barbeirosLocal = [];
     let horasSelecionadas = [];
-
-    // --- HORÁRIOS ATUALIZADOS: 9:00 ÀS 19:30 (CADA 30 MIN) ---
-    const horariosPadrao = [
-        "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", 
-        "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", 
-        "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", 
-        "18:00", "18:30", "19:00", "19:30"
-    ];
+    const horariosPadrao = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"];
 
     function fazerLogin() {
         if(document.getElementById('senha-login').value === "4321") {
@@ -171,16 +156,9 @@
         else el.classList.add('active');
     }
 
-    function configurarDataMinima() {
-        const hoje = new Date();
-        const yyyy = hoje.getFullYear();
-        const mm = String(hoje.getMonth() + 1).padStart(2, '0');
-        const dd = String(hoje.getDate()).padStart(2, '0');
-        document.getElementById('f-data').setAttribute('min', `${yyyy}-${mm}-${dd}`);
-    }
-
     async function init() {
-        configurarDataMinima();
+        const hoje = new Date().toISOString().split("T")[0];
+        document.getElementById('f-data').setAttribute('min', hoje);
         gerarGridHoras();
         await carregarEquipe(); 
         carregarAgenda();
@@ -210,10 +188,12 @@
         const chips = document.querySelectorAll('.h-chip-item');
         if(horasSelecionadas.length === horariosPadrao.length) {
             horasSelecionadas = [];
-            chips.forEach(c => c.classList.remove('selected'));
+            chips.forEach(c => { c.classList.remove('selected'); c.style.opacity = "1"; });
+            document.getElementById('btn-dia-todo').innerText = "BLOQUEAR DIA TODO";
         } else {
             horasSelecionadas = [...horariosPadrao];
-            chips.forEach(c => c.classList.add('selected'));
+            chips.forEach(c => { c.classList.add('selected'); c.style.opacity = "0.3"; });
+            document.getElementById('btn-dia-todo').innerText = "DIA TODO SELECIONADO";
         }
     }
 
@@ -222,57 +202,11 @@
             barbeirosLocal = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
             const selectFolga = document.getElementById('f-barbeiro');
             const renderEquipe = document.getElementById('render-equipe');
-            selectFolga.innerHTML = '<option value="">Escolha um barbeiro</option>';
+            selectFolga.innerHTML = '<option value="">Escolha...</option>';
             renderEquipe.innerHTML = "";
             barbeirosLocal.forEach(b => {
                 selectFolga.innerHTML += `<option value="${b.id}">${b.nome}</option>`;
-                renderEquipe.innerHTML += `<div class="item-list"><div><span style="font-weight:700;">${b.nome}</span></div><div style="display:flex;"><button class="btn-mini-edit" onclick="prepararEdicao('${b.id}')">Editar</button><button class="btn-mini-del" onclick="excluir('barbeiros', '${b.id}')">Remover</button></div></div>`;
-            });
-        });
-    }
-
-    async function salvarFolga() {
-        const bId = document.getElementById('f-barbeiro').value;
-        const dataSelecionada = document.getElementById('f-data').value;
-        if(!bId || !dataSelecionada || horasSelecionadas.length === 0) return alert("Preencha todos os campos!");
-
-        const hoje = new Date();
-        hoje.setHours(0,0,0,0);
-        const dataFolga = new Date(dataSelecionada.replace(/-/g, '\/'));
-        if(dataFolga < hoje) return alert("Erro: Não é possível adicionar folga em dias passados!");
-
-        for(let h of horasSelecionadas) {
-            await db.collection("bloqueios").add({
-                barbeiroId: bId,
-                data: dataSelecionada,
-                hora: h
-            });
-        }
-        alert("Bloqueio realizado!");
-        horasSelecionadas = [];
-        document.getElementById('f-data').value = "";
-        gerarGridHoras();
-    }
-
-    function carregarFolgas() {
-        db.collection("bloqueios").orderBy("data", "desc").onSnapshot(snap => {
-            const render = document.getElementById('render-folgas');
-            render.innerHTML = snap.empty ? "" : '<p style="margin:20px 0 10px; font-size:0.7rem; font-weight:800; color:var(--text-dim); text-transform:uppercase;">Folgas Ativas</p>';
-            snap.docs.forEach(doc => {
-                const f = doc.data();
-                const b = barbeirosLocal.find(x => x.id === f.barbeiroId);
-                render.innerHTML += `<div class="item-list"><span><b>${b ? b.nome : '?'}</b> - ${f.data.split('-').reverse().join('/')} às ${f.hora}</span><button class="btn-mini-del" onclick="excluir('bloqueios', '${doc.id}')">Remover</button></div>`;
-            });
-        });
-    }
-
-    function carregarAgenda() {
-        db.collection("agenda").orderBy("data", "asc").onSnapshot(snap => {
-            const container = document.getElementById('render-agenda');
-            container.innerHTML = snap.empty ? '<p style="text-align:center; color:gray; padding:20px;">Sem agendamentos.</p>' : "";
-            snap.docs.forEach(doc => {
-                const ag = doc.data();
-                container.innerHTML += `<div class="card"><div style="display:flex; justify-content:space-between; align-items: flex-start;"><div><span style="color:var(--primary); font-size:0.75rem; font-weight:800;">${ag.data.split('-').reverse().join('/')} - ${ag.hora}</span><h2 style="margin:5px 0; font-size: 1.4rem;">${ag.cliente.toUpperCase()}</h2></div><button class="btn-mini-del" onclick="excluir('agenda', '${doc.id}')">Cancelar</button></div><div class="agenda-info-line"><span class="highlight-tag">Serviço:</span> <span class="highlight-value">${ag.servico}</span><span style="color:#444">|</span><span class="highlight-tag">Barbeiro:</span> <span class="highlight-value">${ag.barbeiroNome}</span></div></div>`;
+                renderEquipe.innerHTML += `<div class="item-list"><span><b>${b.nome}</b></span><div><button class="btn-mini-edit" onclick="prepararEdicao('${b.id}')">Editar</button><button class="btn-mini-del" onclick="excluir('barbeiros', '${b.id}')">Excluir</button></div></div>`;
             });
         });
     }
@@ -280,9 +214,10 @@
     async function salvarBarbeiro() {
         const id = document.getElementById('b-id').value;
         const nome = document.getElementById('b-nome').value;
+        const whatsapp = document.getElementById('b-whatsapp').value;
         const servs = document.getElementById('b-servs').value;
-        if(!nome) return alert("Nome obrigatório!");
-        const dados = { nome, servicos: servs };
+        if(!nome) return alert("Nome!");
+        const dados = { nome, whatsapp, servicos: servs };
         if(id) await db.collection("barbeiros").doc(id).update(dados);
         else await db.collection("barbeiros").add(dados);
         resetFormEquipe();
@@ -292,33 +227,94 @@
         const b = barbeirosLocal.find(x => x.id === id);
         document.getElementById('b-id').value = b.id;
         document.getElementById('b-nome').value = b.nome;
+        document.getElementById('b-whatsapp').value = b.whatsapp || "";
         document.getElementById('b-servs').value = b.servicos || "";
-        document.getElementById('btn-salvar-barbeiro').innerText = "Atualizar Barbeiro";
+        document.getElementById('btn-salvar-barbeiro').innerText = "Atualizar";
         document.getElementById('btn-cancelar-edit').style.display = "block";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function resetFormEquipe() {
         document.getElementById('b-id').value = "";
         document.getElementById('b-nome').value = "";
+        document.getElementById('b-whatsapp').value = "";
         document.getElementById('b-servs').value = "";
         document.getElementById('btn-salvar-barbeiro').innerText = "Adicionar Barbeiro";
         document.getElementById('btn-cancelar-edit').style.display = "none";
+    }
+
+    async function salvarFolga() {
+        const bId = document.getElementById('f-barbeiro').value;
+        const data = document.getElementById('f-data').value;
+        if(!bId || !data || horasSelecionadas.length === 0) return alert("Selecione tudo!");
+
+        const ehDiaTodo = horasSelecionadas.length === horariosPadrao.length;
+
+        if(ehDiaTodo) {
+            await db.collection("bloqueios").add({ barbeiroId: bId, data: data, hora: "DIA_TODO" });
+        } else {
+            for(let h of horasSelecionadas) {
+                await db.collection("bloqueios").add({ barbeiroId: bId, data: data, hora: h });
+            }
+        }
+        alert("Bloqueado!");
+        horasSelecionadas = [];
+        gerarGridHoras();
+    }
+
+    function carregarFolgas() {
+        db.collection("bloqueios").orderBy("data", "desc").onSnapshot(snap => {
+            const render = document.getElementById('render-folgas');
+            render.innerHTML = snap.empty ? "" : '<p style="margin:20px 0 10px; font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; font-weight:800;">Folgas Ativas</p>';
+            snap.docs.forEach(doc => {
+                const f = doc.data();
+                const b = barbeirosLocal.find(x => x.id === f.barbeiroId);
+                const labelHora = f.hora === "DIA_TODO" ? "DIA TODO" : f.hora;
+                render.innerHTML += `<div class="item-list"><span><b>${b?.nome}</b>: ${f.data.split('-').reverse().join('/')} (${labelHora})</span><button class="btn-mini-del" onclick="excluir('bloqueios', '${doc.id}')">Remover</button></div>`;
+            });
+        });
+    }
+
+    function carregarAgenda() {
+        db.collection("agenda").orderBy("data", "asc").onSnapshot(snap => {
+            const container = document.getElementById('render-agenda');
+            container.innerHTML = snap.empty ? '<p style="text-align:center; padding:30px; color:gray;">Agenda vazia.</p>' : "";
+            snap.docs.forEach(doc => {
+                const ag = doc.data();
+                container.innerHTML += `
+                <div class="card">
+                    <div class="client-header">
+                        <div>
+                            <span class="label-mini">${ag.data.split('-').reverse().join('/')} às ${ag.hora}</span>
+                            <h2 class="client-name">${ag.cliente}</h2>
+                        </div>
+                        <button class="btn-mini-del" onclick="excluir('agenda', '${doc.id}')">Remover</button>
+                    </div>
+                    <div class="agenda-info-grid">
+                        <div>
+                            <span class="label-mini">Barbeiro</span>
+                            <span class="val-highlight">${ag.barbeiroNome}</span>
+                        </div>
+                        <div>
+                            <span class="label-mini">Serviço</span>
+                            <span class="val-highlight val-service">${ag.servico}</span>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        });
     }
 
     async function verificarAssinatura() {
         const doc = await db.collection("configuracao").doc("assinatura").get();
         if(doc.exists) {
             const dataInst = doc.data().dataInstalacao.toDate();
-            const expira = new Date(dataInst);
-            expira.setDate(expira.getDate() + 7);
-            const hoje = new Date();
-            const resta = Math.ceil((expira - hoje) / (1000 * 60 * 60 * 24));
-            document.getElementById('txt-restam').innerText = `Restam: ${resta <= 0 ? 0 : resta} dias`;
+            const expira = new Date(dataInst); expira.setDate(expira.getDate() + 7);
+            const resta = Math.ceil((expira - new Date()) / (1000 * 60 * 60 * 24));
+            document.getElementById('txt-restam').innerText = `Status: ${resta <= 0 ? 'Expirado' : resta + ' dias restantes'}`;
         }
     }
 
-    async function excluir(col, id) { if(confirm("Deseja realmente excluir?")) await db.collection(col).doc(id).delete(); }
+    async function excluir(col, id) { if(confirm("Confirmar exclusão?")) await db.collection(col).doc(id).delete(); }
 </script>
 </body>
 </html>
