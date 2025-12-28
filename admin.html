@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard | El Negrones</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #c5a059;
+            --bg: #0d0d0d;
+            --card: #181818;
+            --input-bg: #222222;
+            --text: #ffffff;
+            --text-dim: #999;
+            --danger: #ff4d4d;
+            --success: #00ff88;
+            --grad: linear-gradient(135deg, #c5a059 0%, #a68549 100%);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        /* --- LOGIN COM BLUR --- */
+        #modal-login { 
+            position: fixed; inset: 0; background: rgba(10,10,10,0.9); 
+            backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: center; z-index: 9999; 
+        }
+        .login-box { width: 85%; max-width: 350px; text-align: center; }
+
+        /* --- MENU SUPERIOR FIXO --- */
+        .top-nav {
+            position: sticky; top: 0;
+            background: rgba(24, 24, 24, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex; justify-content: center;
+            padding: 5px; border-bottom: 1px solid #222; z-index: 1000;
+        }
+        .nav-inner { display: flex; width: 100%; max-width: 500px; gap: 5px; }
+        .nav-item { 
+            padding: 12px 5px; border-radius: 12px;
+            text-align: center; color: var(--text-dim); font-size: 0.7rem; 
+            text-transform: uppercase; font-weight: 700; cursor: pointer; flex: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-item.active { 
+            background: var(--primary); color: #000; 
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+        }
+
+        /* --- CONTEÚDO --- */
+        .content { padding: 20px; max-width: 600px; margin: auto; }
+        
+        .card { 
+            background: var(--card); border-radius: 24px; padding: 25px; 
+            margin-bottom: 20px; border: 1px solid #252525;
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.98); }
+
+        /* --- INPUTS ESTILIZADOS --- */
+        label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; letter-spacing: 1px; }
+        input, select, textarea { 
+            width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid #222;
+            border-radius: 15px; color: #fff; margin-bottom: 20px; font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .btn-action { 
+            width: 100%; padding: 18px; border-radius: 15px; border: none;
+            background: var(--grad); color: #000; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* --- LISTAGENS ANIMADAS --- */
+        .item-row {
+            background: var(--card); border-radius: 20px; padding: 18px;
+            margin-bottom: 12px; border: 1px solid #222;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: fadeInRight 0.5s ease forwards;
+        }
+
+        .info b { display: block; font-size: 1.1rem; margin-bottom: 2px; }
+        .info span { color: var(--primary); font-size: 0.8rem; font-weight: 600; }
+        .info small { display: block; color: var(--text-dim); margin-top: 4px; }
+        
+        .badge-prof { background: rgba(197, 160, 89, 0.15); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; }
+        
+        .btn-delete { color: var(--danger); font-size: 0.8rem; font-weight: 700; background: none; border: none; cursor: pointer; padding: 10px; }
+
+        .tab-content { animation: fadeIn 0.4s ease-in-out; }
+
+        /* --- STATUS PREMIUM --- */
+        .status-pill {
+            display: inline-block; padding: 8px 20px; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 800; margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="modal-login">
+    <div class="login-box animate__animated animate__zoomIn">
+        <h1 style="color:var(--primary); font-weight:900; letter-spacing:5px;">ADMIN</h1>
+        <p style="color:var(--text-dim); margin-bottom:30px;">Barbearia El Negrones</p>
+        <input type="password" id="senha-login" placeholder="Senha Master" style="text-align: center;">
+        <button class="btn-action" onclick="fazerLogin()">Acessar Agora</button>
+    </div>
+</div>
+
+<div id="main-app" style="display: none;">
+    <div class="top-nav">
+        <div class="nav-inner">
+            <div class="nav-item active" onclick="switchTab('agenda', this)">Agenda</div>
+            <div class="nav-item" onclick="switchTab('equipe', this)">Equipe</div>
+            <div class="nav-item" onclick="switchTab('folgas', this)">Folgas</div>
+            <div class="nav-item" onclick="switchTab('premium', this)">⭐</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div id="tab-agenda" class="tab-content">
+            <h2 class="animate__animated animate__fadeInLeft">Próximos Clientes</h2>
+            <div id="render-agenda"></div>
+        </div>
+
+        <div id="tab-equipe" class="tab-content" style="display: none;">
+            <h2 class="animate__animated animate__fadeInLeft">Gerenciar Equipe</h2>
+            <div class="card animate__animated animate__fadeInUp">
+                <label>Nome</label>
+                <input id="b-nome" placeholder="Nome do Barbeiro">
+                <label>WhatsApp</label>
+                <input id="b-whats" placeholder="11999999999">
+                <label>Serviços</label>
+                <textarea id="b-servs" placeholder="Corte - R$ 30" rows="3"></textarea>
+                <button class="btn-action" onclick="salvarBarbeiro()">Adicionar Barbeiro</button>
+            </div>
+            <div id="render-equipe"></div>
+        </div>
+
+        <div id="tab-folgas" class="tab-content" style="display: none;">
+            <h2 class="animate__animated animate__fadeInLeft">Folgas e Bloqueios</h2>
+            <div class="card animate__animated animate__fadeInUp">
+                <label>Quem?</label>
+                <select id="f-barbeiro"></select>
+                <label>Quando?</label>
+                <input type="date" id="f-data">
+                <label>Horário</label>
+                <select id="f-hora">
+                    <option value="DIA_TODO">Dia Inteiro</option>
+                    <option value="09:00">09:00</option><option value="10:00">10:00</option>
+                </select>
+                <button class="btn-action" style="background:var(--danger); color:#fff" onclick="salvarFolga()">Bloquear Data</button>
+            </div>
+            <div id="render-folgas"></div>
+        </div>
+
+        <div id="tab-premium" class="tab-content" style="display: none;">
+            <h2 class="animate__animated animate__fadeInLeft">Assinatura</h2>
+            <div class="card animate__animated animate__fadeInUp" style="text-align: center;">
+                <div id="status-pill-container"></div>
+                <p style="color:var(--text-dim); margin-bottom:30px;">Sua assinatura garante o funcionamento dos agendamentos online e notificações.</p>
+                <a href="https://mpago.la/1bCHsKA" target="_blank" class="btn-action" style="text-decoration:none; display:block">Renovar Assinatura</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyC0x8q1N7R70BYhfd2daedBjRKH0qupJiI",
+        authDomain: "elnes-720ce.firebaseapp.com",
+        projectId: "elnes-720ce",
+        storageBucket: "elnes-720ce.firebasestorage.app",
+        messagingSenderId: "839018097076",
+        appId: "1:839018097076:web:cc902e9081e3a35cac2ae1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    let barbeirosLocal = [];
+    let agendamentosIniciados = false;
+
+    function fazerLogin() {
+        if(document.getElementById('senha-login').value === "4321") {
+            document.getElementById('modal-login').classList.add('animate__zoomOut');
+            setTimeout(() => {
+                document.getElementById('modal-login').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                init();
+            }, 500);
+        } else { alert("Senha Inválida"); }
+    }
+
+    function switchTab(tab, el) {
+        document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+        document.getElementById('tab-'+tab).style.display = 'block';
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function init() {
+        carregarEquipe();
+        carregarAgenda();
+        carregarFolgas();
+        carregarPremium();
+        if (Notification.permission !== "granted") Notification.requestPermission();
+    }
+
+    function carregarAgenda() {
+        const hoje = new Date().toISOString().split('T')[0];
+        db.collection("agenda").where("data", ">=", hoje).onSnapshot(snap => {
+            const container = document.getElementById('render-agenda');
+            container.innerHTML = snap.empty ? '<p style="text-align:center; color:gray">Nenhum agendamento.</p>' : '';
+            
+            let ags = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            ags.sort((a,b) => a.data.localeCompare(b.data) || a.hora.localeCompare(b.hora));
+
+            ags.forEach((ag, index) => {
+                const div = document.createElement('div');
+                div.className = "item-row";
+                div.style.animationDelay = (index * 0.1) + 's';
+                div.innerHTML = `
+                    <div class="info">
+                        <span>${ag.hora} - ${ag.data.split('-').reverse().join('/')}</span>
+                        <b>${ag.cliente}</b>
+                        <small>✂ ${ag.servico}</small>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="badge-prof">${ag.barbeiroNome}</div>
+                        <button class="btn-delete" onclick="excluir('agenda', '${ag.id}')">Apagar</button>
+                    </div>`;
+                container.appendChild(div);
+            });
+
+            if(agendamentosIniciados) {
+                snap.docChanges().forEach(change => {
+                    if(change.type === "added") {
+                        new Notification("Novo Agendamento!", { body: change.doc.data().cliente });
+                        new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3').play();
+                    }
+                });
+            }
+            agendamentosIniciados = true;
+        });
+    }
+
+    async function carregarEquipe() {
+        db.collection("barbeiros").onSnapshot(snap => {
+            barbeirosLocal = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+            const container = document.getElementById('render-equipe');
+            const select = document.getElementById('f-barbeiro');
+            container.innerHTML = ""; select.innerHTML = "";
+            
+            barbeirosLocal.forEach(b => {
+                select.innerHTML += `<option value="${b.id}">${b.nome}</option>`;
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div class="info"><b>${b.nome}</b><small>${b.whatsapp}</small></div>
+                        <button class="btn-delete" onclick="excluir('barbeiros', '${b.id}')">Remover</button>
+                    </div>`;
+            });
+        });
+    }
+
+    async function carregarFolgas() {
+        db.collection("bloqueios").onSnapshot(snap => {
+            const container = document.getElementById('render-folgas');
+            container.innerHTML = "";
+            snap.forEach(doc => {
+                const f = doc.data();
+                const b = barbeirosLocal.find(x => x.id === f.barbeiroId);
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div class="info"><span>${f.data.split('-').reverse().join('/')}</span><b>${f.hora}</b><small>${b ? b.nome : '...'}</small></div>
+                        <button class="btn-delete" onclick="excluir('bloqueios', '${doc.id}')">Liberar</button>
+                    </div>`;
+            });
+        });
+    }
+
+    async function carregarPremium() {
+        const doc = await db.collection("configuracao").doc("assinatura").get();
+        const container = document.getElementById('status-pill-container');
+        if(doc.exists && doc.data().premiumAte) {
+            container.innerHTML = `<div class="status-pill" style="background:var(--success); color:#000">ASSINATURA ATIVA</div>`;
+        } else {
+            container.innerHTML = `<div class="status-pill" style="background:var(--danger); color:#fff">EXPIRADO / TESTE</div>`;
+        }
+    }
+
+    async function salvarBarbeiro() {
+        const nome = document.getElementById('b-nome').value;
+        const whatsapp = document.getElementById('b-whats').value.replace(/\D/g,'');
+        const servicos = document.getElementById('b-servs').value;
+        if(nome && whatsapp) await db.collection("barbeiros").add({ nome, whatsapp, servicos });
+        document.getElementById('b-nome').value = ""; document.getElementById('b-whats').value = "";
+    }
+
+    async function salvarFolga() {
+        const barbeiroId = document.getElementById('f-barbeiro').value;
+        const data = document.getElementById('f-data').value;
+        const hora = document.getElementById('f-hora').value;
+        if(data) await db.collection("bloqueios").add({ barbeiroId, data, hora });
+    }
+
+    async function excluir(col, id) { if(confirm("Deseja apagar?")) await db.collection(col).doc(id).delete(); }
+</script>
+</body>
+</html>
