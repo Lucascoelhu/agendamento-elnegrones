@@ -34,11 +34,11 @@
 
         button.btn-principal { width: 100%; padding: 20px; border-radius: 18px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
 
-        .tabs { display: flex; background: #1a1a1a; border-radius: 15px; padding: 6px; margin-bottom: 25px; }
-        .tab { flex: 1; text-align: center; padding: 12px; font-size: 0.65rem; border-radius: 10px; color: var(--text-dim); cursor: pointer; font-weight: 600; }
+        .tabs { display: flex; background: #1a1a1a; border-radius: 15px; padding: 6px; margin-bottom: 25px; overflow-x: auto; }
+        .tab { flex: 1; min-width: 80px; text-align: center; padding: 12px 5px; font-size: 0.6rem; border-radius: 10px; color: var(--text-dim); cursor: pointer; font-weight: 600; white-space: nowrap; }
         .tab.active { background: var(--primary); color: #000; }
 
-        .agendamento-item { background: #1e1e1e; padding: 20px; border-radius: 22px; border-left: 5px solid var(--primary); margin-bottom: 15px; position: relative; }
+        .agendamento-item { background: #1e1e1e; padding: 20px; border-radius: 22px; border-left: 5px solid var(--primary); margin-bottom: 15px; }
         .prof-badge { background: rgba(197, 160, 89, 0.2); color: var(--primary); padding: 2px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; }
         
         .list-item { background: #222; border-radius: 15px; margin-bottom: 10px; padding: 15px; border: 1px solid #333; }
@@ -83,13 +83,18 @@
         <div class="tabs">
             <div class="tab active" onclick="switchTab('agenda')">Agenda</div>
             <div class="tab" onclick="switchTab('equipe')">Equipe</div>
-            <div class="tab" onclick="switchTab('cadastro')">Novo/Bloqueio</div>
+            <div class="tab" onclick="switchTab('folgas')">Folgas</div>
+            <div class="tab" onclick="switchTab('cadastro')">Novo</div>
             <div class="tab" onclick="switchTab('assinatura')" style="color: gold;">⭐ Premium</div>
         </div>
         
         <div id="tab-agenda"><div id="lista-agendamentos"></div></div>
         <div id="tab-equipe" style="display:none"><div id="lista-profissionais"></div></div>
         
+        <div id="tab-folgas" style="display:none">
+            <div id="lista-bloqueios"></div>
+        </div>
+
         <div id="tab-cadastro" style="display:none">
             <div class="card">
                 <label>Cadastrar Novo Barbeiro</label>
@@ -101,7 +106,7 @@
                 <label style="color:var(--danger)">Bloquear Folga/Data</label>
                 <select id="block-barbeiro"></select>
                 <input type="date" id="block-date">
-                <button class="btn-principal" style="background:var(--danger)" onclick="bloquearData()">BLOQUEAR</button>
+                <button class="btn-principal" style="background:var(--danger)" onclick="bloquearData()">BLOQUEAR DATA</button>
             </div>
         </div>
 
@@ -136,7 +141,6 @@
 </div>
 
 <script>
-    // Configurações do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyC0x8q1N7R70BYhfd2daedBjRKH0qupJiI",
         authDomain: "elnes-720ce.firebaseapp.com",
@@ -154,7 +158,6 @@
     let horarioSelecionado = null;
     let timerLogin;
 
-    // --- ASSINATURA ---
     async function verificarAcesso() {
         const configRef = db.collection("configuracao").doc("assinatura");
         const doc = await configRef.get();
@@ -185,7 +188,6 @@
         } catch(e) { statusDiv.innerHTML = "Erro ao carregar"; }
     }
 
-    // --- INICIALIZAÇÃO ---
     window.onload = async () => {
         if(!await verificarAcesso()) return;
         carregarDadosBase();
@@ -197,14 +199,14 @@
         barbeirosData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
         const sB = document.getElementById("select-barbeiro");
         const bB = document.getElementById("block-barbeiro");
-        sB.innerHTML = '<option value="">Selecione</option>'; bB.innerHTML = '<option value="">Selecione</option>';
+        sB.innerHTML = '<option value="">Selecione</option>'; 
+        bB.innerHTML = '<option value="">Selecione</option>';
         barbeirosData.forEach(b => {
             const opt = `<option value="${b.id}">${b.nome}</option>`;
             sB.innerHTML += opt; bB.innerHTML += opt;
         });
     }
 
-    // --- ADMIN ---
     const gatilho = document.getElementById('gatilho-admin');
     const abrirLogin = () => document.getElementById("modal-login").style.display="flex";
     gatilho.addEventListener('mousedown', () => timerLogin = setTimeout(abrirLogin, 2000));
@@ -222,14 +224,50 @@
     }
 
     function switchTab(t) {
-        ["agenda", "equipe", "cadastro", "assinatura"].forEach(id => document.getElementById("tab-"+id).style.display = (t === id) ? 'block' : 'none');
+        ["agenda", "equipe", "cadastro", "assinatura", "folgas"].forEach(id => {
+            const el = document.getElementById("tab-"+id);
+            if(el) el.style.display = (t === id) ? 'block' : 'none';
+        });
         document.querySelectorAll(".tab").forEach(el => el.classList.remove("active"));
         event.currentTarget.classList.add("active");
         if(t === 'equipe') carregarEquipe();
         if(t === 'assinatura') atualizarInfoAssinatura();
+        if(t === 'folgas') carregarBloqueios();
     }
 
-    // --- AGENDA CLIENTE ---
+    async function carregarBloqueios() {
+        const container = document.getElementById("lista-bloqueios");
+        container.innerHTML = "<p style='text-align:center; color:gray;'>Carregando folgas...</p>";
+        
+        const snap = await db.collection("bloqueios").get();
+        container.innerHTML = "";
+        
+        if(snap.empty) {
+            container.innerHTML = "<div class='card' style='text-align:center'>Nenhuma folga registrada.</div>";
+            return;
+        }
+
+        snap.forEach(doc => {
+            const data = doc.data();
+            const bNome = barbeirosData.find(b => b.id === data.barbeiroId)?.nome || "Barbeiro removido";
+            container.innerHTML += `
+                <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <span class="prof-badge">${bNome}</span><br>
+                        <strong style="font-size:1.1rem">📅 ${data.data.split('-').reverse().join('/')}</strong>
+                    </div>
+                    <button onclick="removerBloqueio('${doc.id}')" style="background:none; border:none; color:var(--danger); font-weight:bold; cursor:pointer;">DESBLOQUEAR</button>
+                </div>`;
+        });
+    }
+
+    async function removerBloqueio(id) {
+        if(confirm("Deseja liberar essa data novamente?")) {
+            await db.collection("bloqueios").doc(id).delete();
+            carregarBloqueios();
+        }
+    }
+
     async function verificarDataEGerar() {
         const bId = document.getElementById("select-barbeiro").value;
         const data = document.getElementById("data-agenda").value;
@@ -286,7 +324,6 @@
         alert("Agendado!"); location.reload();
     }
 
-    // --- FUNÇÕES ADMIN ---
     function carregarAdminAgenda() {
         const hoje = new Date().toISOString().split('T')[0];
         db.collection("agenda").onSnapshot(snap => {
@@ -347,8 +384,11 @@
     async function bloquearData() {
         const bId = document.getElementById("block-barbeiro").value;
         const data = document.getElementById("block-date").value;
-        if(bId && data) await db.collection("bloqueios").add({ barbeiroId: bId, data: data });
-        alert("Bloqueado!");
+        if(bId && data) {
+            await db.collection("bloqueios").add({ barbeiroId: bId, data: data });
+            alert("Bloqueado!");
+            if(document.getElementById("tab-folgas").style.display === 'block') carregarBloqueios();
+        }
     }
 
     async function apagarAgendamento(id) { if(confirm("Apagar?")) await db.collection("agenda").doc(id).delete(); }
