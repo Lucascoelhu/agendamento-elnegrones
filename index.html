@@ -9,203 +9,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #c5a059; 
-            --primary-dark: #a68549;
-            --bg: #0a0a0a; 
-            --card: #141414; 
-            --input-bg: #1d1d1d; 
-            --text: #ffffff; 
-            --text-dim: #999;
-            --danger: #ff4757; 
-            --whatsapp: #25d366; 
-            --grad: linear-gradient(135deg, #c5a059 0%, #a68549 100%);
+            --primary: #c5a059; --bg: #0a0a0a; --card: #141414; 
+            --input-bg: #1d1d1d; --text: #ffffff; --text-dim: #999;
+            --whatsapp: #25d366; --grad: linear-gradient(135deg, #c5a059 0%, #a68549 100%);
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0; 
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 480px; padding-bottom: 50px; }
-
         .header { text-align: center; padding: 40px 0 20px; }
-        .header h1 { 
-            font-weight: 900; 
-            font-size: 2rem;
-            color: var(--primary); 
-            letter-spacing: 6px; 
-            margin: 0;
-            text-shadow: 0 4px 10px rgba(197, 160, 89, 0.2);
-        }
-        .header p { color: var(--text-dim); font-size: 0.8rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px; }
-
-        .card { 
-            background: var(--card); 
-            padding: 25px; 
-            border-radius: 35px; 
-            border: 1px solid #222;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        label { 
-            font-size: 0.7rem; 
-            color: var(--primary); 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            margin: 0 0 8px 10px; 
-            display: block; 
-            letter-spacing: 1px;
-        }
-
-        input, select { 
-            width: 100%; 
-            padding: 16px; 
-            margin-bottom: 20px; 
-            border-radius: 18px; 
-            border: 1px solid #282828; 
-            background: var(--input-bg); 
-            color: #fff; 
-            font-size: 1rem; 
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(197, 160, 89, 0.1); }
-
-        .horarios-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin-bottom: 25px; 
-        }
-
-        .hora-btn { 
-            background: #1a1a1a; 
-            padding: 15px 5px; 
-            text-align: center; 
-            border-radius: 15px; 
-            border: 1px solid #252525; 
-            cursor: pointer; 
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            color: var(--text-dim);
-        }
-
-        .hora-btn:hover:not(.ocupada) { border-color: var(--primary); color: #fff; }
-
-        .hora-btn.selecionada { 
-            background: var(--grad); 
-            color: #000; 
-            font-weight: 800; 
-            border: none;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
-        }
-
-        .hora-btn.ocupada { 
-            background: #111;
-            opacity: 0.3; 
-            color: #444;
-            border: 1px dashed #222;
-            cursor: pointer; /* Mudado para pointer para permitir o clique informativo */
-        }
-
-        .btn-principal { 
-            width: 100%; 
-            padding: 22px; 
-            border-radius: 20px; 
-            background: var(--grad); 
-            color: #000; 
-            font-weight: 900; 
-            border: none; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn-principal:active { transform: scale(0.98); }
-
-        .area-whatsapp {
-            background: rgba(37, 211, 102, 0.05);
-            border: 1px solid rgba(37, 211, 102, 0.2);
-            padding: 15px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        #bloqueio-total { 
-            display: none; 
-            position: fixed; 
-            inset: 0;
-            background: var(--bg); 
-            z-index: 9999; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-        }
+        .header h1 { font-weight: 900; font-size: 2rem; color: var(--primary); letter-spacing: 6px; margin: 0; }
+        .card { background: var(--card); padding: 25px; border-radius: 35px; border: 1px solid #222; }
+        label { font-size: 0.7rem; color: var(--primary); font-weight: 800; text-transform: uppercase; margin: 0 0 8px 10px; display: block; }
+        input, select { width: 100%; padding: 16px; margin-bottom: 20px; border-radius: 18px; border: 1px solid #282828; background: var(--input-bg); color: #fff; font-size: 1rem; outline: none; }
+        .horarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .hora-btn { background: #1a1a1a; padding: 15px 5px; text-align: center; border-radius: 15px; border: 1px solid #252525; cursor: pointer; color: var(--text-dim); transition: 0.3s; }
+        .hora-btn.selecionada { background: var(--grad); color: #000; font-weight: 800; border: none; transform: scale(1.05); }
+        .hora-btn.ocupada { background: #111; opacity: 0.3; color: #444; border: 1px dashed #222; cursor: not-allowed; }
+        .btn-principal { width: 100%; padding: 22px; border-radius: 20px; background: var(--grad); color: #000; font-weight: 900; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        #bloqueio-total { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; align-items: center; justify-content: center; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="bloqueio-total">
     <div style="padding: 30px;">
-        <div style="font-size: 80px; margin-bottom: 20px;">🔒</div>
         <h2 style="color: var(--primary); font-weight: 900;">SISTEMA EM PAUSA</h2>
         <p style="color: var(--text-dim)">Estamos organizando a casa. Voltamos logo!</p>
     </div>
 </div>
 
 <div class="container">
-    <div class="header">
-        <h1>EL NEGRONES</h1>
-        <p>Barbearia & Estilo</p>
-    </div>
-    
+    <div class="header"><h1>EL NEGRONES</h1><p>Barbearia & Estilo</p></div>
     <div class="card">
         <label>Profissional</label>
-        <select id="select-barbeiro" onchange="atualizarServicos()">
-            <option value="">Carregando...</option>
-        </select>
-
-        <label>Serviço</label>
-        <select id="select-servico">
-            <option value="">Escolha o profissional primeiro</option>
-        </select>
-
-        <label>Data do Agendamento</label>
-        <input type="date" id="data-agenda" onchange="verificarDataEGerar()">
+        <select id="select-barbeiro" onchange="atualizarServicos()"><option value="">Carregando...</option></select>
         
-        <div id="area-indisponivel" class="area-whatsapp">
-            <div style="color: var(--whatsapp); font-weight: 700; font-size: 0.85rem; margin-bottom: 8px;">
-                Sem horários online para esta data
-            </div>
-            <button onclick="contatarBarbeiro()" style="background: var(--whatsapp); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; width: 100%;">
-                CONSULTAR VIA WHATSAPP
-            </button>
-        </div>
-
-        <label>Horário disponível</label>
+        <label>Serviço</label>
+        <select id="select-servico"><option value="">Escolha o profissional primeiro</option></select>
+        
+        <label>Data</label>
+        <input type="date" id="data-agenda" onchange="gerarHorarios()">
+        
+        <label>Horários Disponíveis</label>
         <div class="horarios-grid" id="grid-horarios"></div>
-
+        
         <label>Seu Nome</label>
         <input type="text" id="nome-cliente" placeholder="Como devemos te chamar?">
-
+        
         <button class="btn-principal" onclick="confirmarAgendamento()">Confirmar Reserva</button>
     </div>
 </div>
@@ -221,24 +71,22 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    
     let barbeirosData = [];
     let horarioSelecionado = null;
+    const horasBase = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"];
 
     window.onload = async () => {
-        // Bloqueio por assinatura
         const config = await db.collection("configuracao").doc("assinatura").get();
         if (config.exists) {
             const dataInst = config.data().dataInstalacao.toDate();
             const expira = new Date(dataInst);
             expira.setDate(expira.getDate() + 7);
             if (new Date() > expira) {
-                document.getElementById("bloqueio-total").style.display = "flex";
-                return;
+                document.getElementById("bloqueio-total").style.display = "flex"; return;
             }
         }
-        
         carregarBarbeiros();
-        // Definir data de hoje como padrão e mínima
         const hoje = new Date().toISOString().split("T")[0];
         document.getElementById('data-agenda').value = hoje;
         document.getElementById('data-agenda').min = hoje;
@@ -256,20 +104,7 @@
         const b = barbeirosData.find(x => x.id === document.getElementById("select-barbeiro").value);
         const sS = document.getElementById("select-servico");
         sS.innerHTML = '<option value="">Selecione o Serviço</option>';
-        if(b && b.servicos) {
-            b.servicos.split('\n').forEach(s => {
-                if(s.trim()) sS.innerHTML += `<option>${s.trim()}</option>`;
-            });
-        }
-        verificarDataEGerar();
-    }
-
-    async function verificarDataEGerar() {
-        const bId = document.getElementById("select-barbeiro").value;
-        const data = document.getElementById("data-agenda").value;
-        if(!bId || !data) return;
-        
-        // Simplesmente gera os horários (a lógica de bloqueio está dentro do gerarHorarios)
+        if(b && b.servicos) b.servicos.split('\n').forEach(s => { if(s.trim()) sS.innerHTML += `<option>${s.trim()}</option>`; });
         gerarHorarios();
     }
 
@@ -277,53 +112,33 @@
         const data = document.getElementById("data-agenda").value;
         const bId = document.getElementById("select-barbeiro").value;
         const grid = document.getElementById("grid-horarios");
-        
+        if(!bId || !data) return;
         grid.innerHTML = "<div style='grid-column: span 3; color: var(--primary); font-size: 0.8rem; text-align: center;'>Consultando agenda...</div>";
-
+        
         const agSnap = await db.collection("agenda").where("data", "==", data).where("barbeiroId", "==", bId).get();
         const blSnap = await db.collection("bloqueios").where("data", "==", data).where("barbeiroId", "==", bId).get();
-        const ocupados = [...agSnap.docs.map(d => d.data().hora), ...blSnap.docs.map(d => d.data().hora)];
         
-        grid.innerHTML = "";
-        let livres = 0;
-        
-        // Horários de 9:00 as 19:30
-        const horasBase = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"];
+        const bloqueios = blSnap.docs.map(d => d.data().hora);
+        if(bloqueios.includes("DIA_TODO")) { 
+            grid.innerHTML = "<div style='grid-column: span 3; color: #ff4757; text-align:center; font-weight:bold;'>Sem horários disponíveis hoje</div>"; 
+            return; 
+        }
 
+        const ocupados = [...agSnap.docs.map(d => d.data().hora), ...bloqueios];
+        grid.innerHTML = "";
+        
         horasBase.forEach(hora => {
             const isOcupado = ocupados.includes(hora);
-            if(!isOcupado) livres++;
-            
             const div = document.createElement("div");
             div.className = "hora-btn " + (isOcupado ? "ocupada" : "");
             div.textContent = hora;
-            
             div.onclick = () => {
-                if(isOcupado) {
-                    if(confirm("Este horário já está reservado. Deseja enviar uma mensagem no WhatsApp do barbeiro para consultar uma vaga de encaixe?")) {
-                        contatarBarbeiro();
-                    }
-                    return;
-                }
+                if(isOcupado) return;
                 document.querySelectorAll(".hora-btn").forEach(e => e.classList.remove("selecionada"));
-                div.classList.add("selecionada");
-                horarioSelecionado = hora;
+                div.classList.add("selecionada"); horarioSelecionado = hora;
             };
             grid.appendChild(div);
         });
-
-        document.getElementById("area-indisponivel").style.display = (livres === 0) ? "block" : "none";
-    }
-
-    function contatarBarbeiro() {
-        const b = barbeirosData.find(x => x.id === document.getElementById("select-barbeiro").value);
-        const dataFormatada = document.getElementById('data-agenda').value.split('-').reverse().join('/');
-        if(b) {
-            const msg = encodeURIComponent(`Olá ${b.nome}, vi no sistema que o horário das ${horarioSelecionado || ''} no dia ${dataFormatada} está ocupado. Teria algum encaixe?`);
-            window.open(`https://wa.me/55${b.whatsapp || 'SEU_NUMERO_AQUI'}?text=${msg}`);
-        } else {
-            alert("Selecione um barbeiro primeiro!");
-        }
     }
 
     async function confirmarAgendamento() {
@@ -333,24 +148,39 @@
         const data = document.getElementById("data-agenda").value;
         const serv = document.getElementById("select-servico").value;
 
-        if(!nome || !horarioSelecionado || !bId || !serv) {
-            return alert("Por favor, preencha todos os campos e selecione um horário!");
-        }
+        if(!nome || !horarioSelecionado || !bId || !serv) return alert("Por favor, preencha todos os campos!");
 
         try {
+            // 1. Salva no Firebase
             await db.collection("agenda").add({ 
-                cliente: nome, 
-                barbeiroId: bId, 
-                barbeiroNome: bNome, 
-                data: data, 
-                hora: horarioSelecionado, 
-                servico: serv,
+                cliente: nome, barbeiroId: bId, barbeiroNome: bNome, 
+                data: data, hora: horarioSelecionado, servico: serv,
                 criadoEm: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("Agendamento realizado! Te esperamos lá. ✂️");
+
+            // 2. NOTIFICAÇÃO TELEGRAM (CONFIGURAÇÃO FINAL)
+            const BOT_TOKEN = "8474434417:AAGFJ78JXXE6bTCEQtYwZXWnErK3c5ub9vU"; 
+            const CHAT_ID = "7905393233"; 
+            
+            const dataFormatada = data.split('-').reverse().join('/');
+            const msg = `🚀 *NOVO AGENDAMENTO - EL NEGRONES*\n\n` +
+                         `👤 *Cliente:* ${nome}\n` +
+                         `📅 *Data:* ${dataFormatada}\n` +
+                         `⏰ *Hora:* ${horarioSelecionado}\n` +
+                         `✂️ *Serviço:* ${serv}\n` +
+                         `💈 *Barbeiro:* ${bNome}`;
+
+            // URL Corrigida (Removido os $ extras que causavam erro)
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+
+            // Envio para o Telegram
+            fetch(url).catch(err => console.error("Erro Telegram:", err));
+
+            alert("Agendamento realizado com sucesso! Te esperamos lá. ✂️");
             location.reload();
-        } catch (e) {
-            alert("Erro ao agendar. Tente novamente.");
+        } catch (e) { 
+            console.error(e);
+            alert("Erro ao agendar. Tente novamente."); 
         }
     }
 </script>
